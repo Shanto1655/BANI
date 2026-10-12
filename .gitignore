@@ -1,0 +1,47 @@
+﻿# Python environments
+.venv/
+venv/
+env/
+
+# Python generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+
+# Local AI models and downloaded weights
+*.gguf
+*.safetensors
+models/
+model_cache/
+
+# Local user data and databases
+user_data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs and temporary files
+logs/
+*.log
+tmp/
+temp/
+
+# Build and packaging output
+build/
+dist/
+*.spec
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
