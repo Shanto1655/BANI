@@ -5,6 +5,12 @@ from src.bani.main import get_startup_message
 from src.bani.commands import get_response, handle_command
 from src.bani.conversation import get_conversation_response
 
+from src.bani.input_validation import (
+    MAX_MESSAGE_LENGTH,
+    normalize_message,
+    validate_message,
+)
+
 
 class TestStartupMessage(unittest.TestCase):
     def test_startup_message_is_a_string(self):
@@ -65,6 +71,31 @@ class TestConversationManager(unittest.TestCase):
         )
 
     def test_empty_message_is_handled(self):
+        self.assertEqual(
+            get_conversation_response("   "),
+            "You haven't typed anything yet.",
+        )
+
+
+class TestInputValidation(unittest.TestCase):
+    def test_normalize_removes_outer_spaces(self):
+        self.assertEqual(normalize_message("  hello  "), "hello")
+
+    def test_valid_message_has_no_validation_error(self):
+        self.assertIsNone(validate_message("hello"))
+
+    def test_empty_message_is_rejected(self):
+        self.assertIsNotNone(validate_message(""))
+
+    def test_message_at_limit_is_allowed(self):
+        message = "a" * MAX_MESSAGE_LENGTH
+        self.assertIsNone(validate_message(message))
+
+    def test_message_over_limit_is_rejected(self):
+        message = "a" * (MAX_MESSAGE_LENGTH + 1)
+        self.assertIsNotNone(validate_message(message))
+
+    def test_conversation_handles_whitespace_only_input(self):
         self.assertEqual(
             get_conversation_response("   "),
             "You haven't typed anything yet.",
