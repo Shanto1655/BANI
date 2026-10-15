@@ -1,11 +1,9 @@
 ﻿
 import unittest
 
-from src.bani.main import (
-    get_response,
-    get_startup_message,
-    handle_command,
-)
+from src.bani.main import get_startup_message
+from src.bani.commands import get_response, handle_command
+from src.bani.conversation import get_conversation_response
 
 
 class TestStartupMessage(unittest.TestCase):
@@ -51,6 +49,26 @@ class TestCommandHandler(unittest.TestCase):
 
     def test_unknown_message_returns_none(self):
         self.assertIsNone(handle_command("Explain quantum computing"))
+
+
+class TestConversationManager(unittest.TestCase):
+    def test_recognized_command_uses_command_response(self):
+        self.assertIn(
+            "Available commands",
+            get_conversation_response("help"),
+        )
+
+    def test_unknown_message_uses_fallback(self):
+        self.assertEqual(
+            get_conversation_response("Explain quantum computing"),
+            "I heard you say: Explain quantum computing",
+        )
+
+    def test_empty_message_is_handled(self):
+        self.assertEqual(
+            get_conversation_response("   "),
+            "You haven't typed anything yet.",
+        )
 
 
 if __name__ == "__main__":
