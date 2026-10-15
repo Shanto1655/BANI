@@ -1,10 +1,28 @@
 ﻿
 """Initial application entry point."""
 
+from . import __version__
+
 
 def get_startup_message() -> str:
     """Return BANI's initial startup message."""
     return "Hello, buddy! I'm BANI. How can I help you?"
+
+
+def handle_command(message: str) -> str | None:
+    """Handle recognized built-in commands."""
+    command = message.strip().lower()
+
+    if command in {"hello", "hi", "hey"}:
+        return "Hello, buddy! How can I help you?"
+
+    if command == "help":
+        return "Available commands: hello, help, version, exit, quit."
+
+    if command == "version":
+        return f"BANI version {__version__}"
+
+    return None
 
 
 def get_response(message: str) -> str:
@@ -32,7 +50,12 @@ def main() -> None:
             print("BANI: Goodbye, buddy!")
             break
 
-        print(f"BANI: {get_response(message)}")
+        response = handle_command(message)
+
+        if response is None:
+            response = get_response(message)
+
+        print(f"BANI: {response}")
 
 
 if __name__ == "__main__":
